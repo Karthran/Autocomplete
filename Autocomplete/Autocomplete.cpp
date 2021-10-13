@@ -21,7 +21,6 @@ int main()
     while (!fs.eof())
     {
         fs >> word;
-        // std::cout << word << std::endl;
         if (word.size() > 1) trie.insert(word);
     }
     fs.close();
@@ -32,22 +31,16 @@ int main()
     std::string current_word;
     char buf[2]{};
 
-    auto empty_list{true};
-
     for (auto i{0}; i < MAX_WORD_LENGTH; ++i)
     {
         system("cls");
         auto word_number{0};
-        if (current_word.size() || empty_list)
+        std::cout << "Press Ctrl + Character(for example Ctrl + A) for autocomplete." << std::endl;
+        if (current_word.size())
         {
             word_number = AUTOCOMPLETE_WORD_NUMBER;
 
-            if (!empty_list)
-            {
-                trie.getAutocomplete(current_word, word_number, auto_word);
-            }
-            else
-                word_number = 0;
+            trie.getAutocomplete(current_word, word_number, auto_word);
 
             for (auto i{0}; i < AUTOCOMPLETE_WORD_NUMBER; ++i)
             {
@@ -62,15 +55,15 @@ int main()
         {
             for (auto i{0}; i < AUTOCOMPLETE_WORD_NUMBER; ++i)
             {
-                    std::cout << std::endl;
+                std::cout << std::endl;
             }
         }
-        std::cout << "Enter string (BackSpace delete previous character):" << std::endl;
+        std::cout << "Enter string (Press BackSpace for delete previous character):" << std::endl;
         std::cout << string << current_word;
         auto chr = _getch();
         buf[0] = chr;
 
-        if (chr >= 1 && chr <= word_number )
+        if (chr >= 1 && chr <= word_number)
         {
             current_word += auto_word[chr - 1];
             continue;
@@ -78,8 +71,9 @@ int main()
 
         if (chr == '\b')
         {
-            if (current_word.size()) current_word.pop_back();
-            
+            if (current_word.size())
+                current_word.pop_back();
+
             else if (string.size())
             {
                 string.pop_back();
@@ -94,7 +88,6 @@ int main()
                     --str_length;
                 }
                 std::reverse(current_word.begin(), current_word.end());
-                if (current_word.size()) empty_list = false;
             }
             i -= 2;
             continue;
@@ -106,17 +99,12 @@ int main()
             string += current_word;
             current_word.clear();
 
-            empty_list = true;
-
             if (chr == '\r')
             {
                 break;
             }
         }
-        else
-            empty_list = false;
     }
 
     std::cout << std::endl << string << std::endl;
-
 }
