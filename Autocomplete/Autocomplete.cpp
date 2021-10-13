@@ -72,9 +72,8 @@ int main()
 
         if (chr == '\b')
         {
-            if (current_word.size())
-                current_word.pop_back();
-
+            if (current_word.size()) current_word.pop_back();
+            
             else if (string.size())
             {
                 string.pop_back();
@@ -89,6 +88,7 @@ int main()
                     --str_length;
                 }
                 std::reverse(current_word.begin(), current_word.end());
+                if (current_word.size()) empty_list = false;
             }
             i -= 2;
             continue;
