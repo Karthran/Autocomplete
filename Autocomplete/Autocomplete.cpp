@@ -65,7 +65,7 @@ int main()
                     std::cout << std::endl;
             }
         }
-
+        std::cout << "Enter string (BackSpace delete previous character):" << std::endl;
         std::cout << string << current_word;
         auto chr = _getch();
         buf[0] = chr;
