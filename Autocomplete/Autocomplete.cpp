@@ -6,11 +6,10 @@
 
 #include "Trie.h"
 
-const int AUTOCOMPLETE_WORD_NUMBER = 10;
+const int AUTOCOMPLETE_WORD_NUMBER = 7;
 
 int main()
 {
-
     Trie trie;
 
     std::string filename = "eng.txt";
@@ -38,9 +37,10 @@ int main()
     for (auto i{0}; i < MAX_WORD_LENGTH; ++i)
     {
         system("cls");
+        auto word_number{0};
         if (current_word.size() || empty_list)
         {
-            auto word_number{AUTOCOMPLETE_WORD_NUMBER};
+            word_number = AUTOCOMPLETE_WORD_NUMBER;
 
             if (!empty_list)
             {
@@ -55,7 +55,7 @@ int main()
                 if (i < dif)
                     std::cout << std::endl;
                 else
-                    std::cout << std::setw(3) << i - dif << "." << current_word << auto_word[i - dif] << std::endl;
+                    std::cout << std::setw(3) << char(i - dif + 65) << "." << current_word << auto_word[i - dif] << std::endl;
             }
         }
         else
@@ -69,6 +69,12 @@ int main()
         std::cout << string << current_word;
         auto chr = _getch();
         buf[0] = chr;
+
+        if (chr >= 1 && chr <= word_number )
+        {
+            current_word += auto_word[chr - 1];
+            continue;
+        }
 
         if (chr == '\b')
         {
