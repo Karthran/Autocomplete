@@ -1,8 +1,8 @@
 #include "Trie.h"
 
-auto Trie::getNewNode() const -> TrieNode*
+auto Trie::getNewNode() const -> std::shared_ptr<TrieNode>
 {
-    return new TrieNode();
+    return std::make_shared<TrieNode>();
 }
 
 auto Trie::insert(const std::string& key) -> void
@@ -14,7 +14,7 @@ auto Trie::insert(const std::string& key) -> void
 
     for (int i = 0; i < length; i++)
     {
-        // вычисляем индекс в алфите через смещение отнситьельно первой буквы
+        // вычисляем индекс в алфите через смещение отнсительно первой буквы
         int index{0};
         if (key[i] >= 'a' && key[i] <= 'z')
             index = key[i] - 'a';
@@ -53,20 +53,20 @@ auto Trie::search(const std::string& key) const -> bool
     return (node != nullptr && node->isEndOfWord);
 }
 // Вохвращает true если root имеет лист, иначе false
-auto Trie::isEmpty(TrieNode* node) -> bool
+auto Trie::isEmpty(std::shared_ptr<TrieNode> node) -> bool
 {
     for (int i = 0; i < ALPHABET_SIZE; i++)
         if (node->children[i]) return false;
     return true;
 }
 
-auto Trie::remove(std::string key, int depth) -> TrieNode*
+auto Trie::remove(std::string key, int depth) -> std::shared_ptr<TrieNode>
 {
     return remove(_root, key, depth);
 }
 
 // Рекурсивная функция удаления ключа из дерева
-auto Trie::remove(TrieNode* node, std::string key, int depth) -> TrieNode*
+auto Trie::remove(std::shared_ptr<TrieNode> node, std::string key, int depth) -> std::shared_ptr<TrieNode>
 {
     // Если дерево пустое
     if (!node) return nullptr;
@@ -81,7 +81,6 @@ auto Trie::remove(TrieNode* node, std::string key, int depth) -> TrieNode*
         // Если ключ не евляется префиксом, удаляем его
         if (isEmpty(node))
         {
-            delete (node);
             node = nullptr;
         }
 
@@ -103,7 +102,6 @@ auto Trie::remove(TrieNode* node, std::string key, int depth) -> TrieNode*
     // и он не заканчивается другим словом.
     if (isEmpty(node) && node->isEndOfWord == false)
     {
-        delete (node);
         node = nullptr;
     }
 
@@ -112,7 +110,7 @@ auto Trie::remove(TrieNode* node, std::string key, int depth) -> TrieNode*
 }
 
 // не изменияйте сигнатуру функции
-auto Trie::findMinPrefixes(TrieNode* root, char buf[], int ind, std::string& res) -> void
+auto Trie::findMinPrefixes(std::shared_ptr<TrieNode> root, char buf[], int ind, std::string& res) -> void
 {
     if (!root) return;
 
@@ -134,7 +132,7 @@ auto Trie::findMinPrefixes(TrieNode* root, char buf[], int ind, std::string& res
     }
 }
 
-auto Trie::hasEndOfWord(TrieNode* node, int& count) -> void
+auto Trie::hasEndOfWord(std::shared_ptr<TrieNode> node, int& count) -> void
 {
     if (node->isEndOfWord) ++count;
 
@@ -170,19 +168,19 @@ auto Trie::getAutocomplete(const std::string& preffix, int& words_number, std::s
     words_number = getAutocomplete_internal(node, words_array, buf, 0, words_number);
 }
 
-auto Trie::getAutocomplete_internal(TrieNode* node, std::string* words_array, char buf[], int index, int& words_number) const -> int
+auto Trie::getAutocomplete_internal(std::shared_ptr<TrieNode> node, std::string* words_array, char buf[], int index, int& words_number) const -> int
 {
-    static auto word_index{0}; // index string in the words_array
+    static auto word_index{0};  // index string in the words_array
     if (!index) word_index = 0;
 
-    if (words_number == word_index) return word_index; // if all words found 
+    if (words_number == word_index) return word_index;  // if all words found
 
-    if (node->isEndOfWord) 
+    if (node->isEndOfWord)
     {
         buf[index] = '\0';
-        
+
         words_array[word_index] = std::string(buf);
-       
+
         ++word_index;
     }
 
