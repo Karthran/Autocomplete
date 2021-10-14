@@ -53,23 +53,23 @@ auto Trie::search(const std::string& key) const -> bool
     return (node != nullptr && node->isEndOfWord);
 }
 // Вохвращает true если root имеет лист, иначе false
-auto Trie::isEmpty(std::shared_ptr<TrieNode> node) -> bool
+auto Trie::isEmpty(std::shared_ptr<TrieNode>& node) -> bool
 {
     for (int i = 0; i < ALPHABET_SIZE; i++)
         if (node->children[i]) return false;
     return true;
 }
 
-auto Trie::remove(std::string key, int depth) -> std::shared_ptr<TrieNode>
+auto Trie::remove(std::string key, int depth) -> std::shared_ptr<TrieNode>&
 {
     return remove(_root, key, depth);
 }
 
 // Рекурсивная функция удаления ключа из дерева
-auto Trie::remove(std::shared_ptr<TrieNode> node, std::string key, int depth) -> std::shared_ptr<TrieNode>
+auto Trie::remove(std::shared_ptr<TrieNode>& node, std::string key, int depth) -> std::shared_ptr<TrieNode>&
 {
     // Если дерево пустое
-    if (!node) return nullptr;
+    if (!node) return node;
 
     // если дошли до конца ключа
     if (depth == key.size())
@@ -110,7 +110,7 @@ auto Trie::remove(std::shared_ptr<TrieNode> node, std::string key, int depth) ->
 }
 
 // не изменияйте сигнатуру функции
-auto Trie::findMinPrefixes(std::shared_ptr<TrieNode> root, char buf[], int ind, std::string& res) -> void
+auto Trie::findMinPrefixes(std::shared_ptr<TrieNode>& root, char buf[], int ind, std::string& res) -> void
 {
     if (!root) return;
 
@@ -132,7 +132,7 @@ auto Trie::findMinPrefixes(std::shared_ptr<TrieNode> root, char buf[], int ind, 
     }
 }
 
-auto Trie::hasEndOfWord(std::shared_ptr<TrieNode> node, int& count) -> void
+auto Trie::hasEndOfWord(std::shared_ptr<TrieNode>& node, int& count) -> void
 {
     if (node->isEndOfWord) ++count;
 
@@ -168,7 +168,7 @@ auto Trie::getAutocomplete(const std::string& preffix, int& words_number, std::s
     words_number = getAutocomplete_internal(node, words_array, buf, 0, words_number);
 }
 
-auto Trie::getAutocomplete_internal(std::shared_ptr<TrieNode> node, std::string* words_array, char buf[], int index, int& words_number) const -> int
+auto Trie::getAutocomplete_internal(std::shared_ptr<TrieNode>& node, std::string* words_array, char buf[], int index, int& words_number) const -> int
 {
     static auto word_index{0};  // index string in the words_array
     if (!index) word_index = 0;
