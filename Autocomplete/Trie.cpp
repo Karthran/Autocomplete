@@ -10,7 +10,7 @@ auto Trie::insert(const std::string& key) -> void
     if (!_root) _root = getNewNode();
 
     auto node{_root};
-    int length = key.size();
+    int length = (int)key.size();
 
     for (int i = 0; i < length; i++)
     {
@@ -35,7 +35,7 @@ auto Trie::search(const std::string& key) const -> bool
 {
     if (!_root) return false;
     auto node{_root};
-    int length = key.size();
+    int length = (int)key.size();
 
     for (int i = 0; i < length; i++)
     {
@@ -144,7 +144,7 @@ auto Trie::hasEndOfWord(TrieNode* node, int& count) -> void
     }
 }
 
-auto Trie::getAutocomplete(const std::string& preffix, int& word_number, std::string* word_array) const -> void
+auto Trie::getAutocomplete(const std::string& preffix, int& words_number, std::string* words_array) const -> void
 {
     if (!_root) return;
 
@@ -161,27 +161,27 @@ auto Trie::getAutocomplete(const std::string& preffix, int& word_number, std::st
 
         if (!node->children[index])
         {
-            word_number = 0;
+            words_number = 0;
             return;
         }
         node = node->children[index];
     }
-    char buf[MAX_WORD_LENGTH];
-    word_number = getAutocomplete_internal(node, word_array, buf, 0, word_number);
+    char buf[MAX_STRING_LENGTH];
+    words_number = getAutocomplete_internal(node, words_array, buf, 0, words_number);
 }
 
-auto Trie::getAutocomplete_internal(TrieNode* node, std::string* word_array, char buf[], int index, int& word_number) const -> int
+auto Trie::getAutocomplete_internal(TrieNode* node, std::string* words_array, char buf[], int index, int& words_number) const -> int
 {
-    static auto word_index{0};
+    static auto word_index{0}; // index string in the words_array
     if (!index) word_index = 0;
 
-    if (word_number == word_index) return word_index;
+    if (words_number == word_index) return word_index; // if all words found 
 
-    if (node->isEndOfWord)
+    if (node->isEndOfWord) 
     {
         buf[index] = '\0';
         
-        word_array[word_index] = std::string(buf);
+        words_array[word_index] = std::string(buf);
        
         ++word_index;
     }
@@ -192,7 +192,7 @@ auto Trie::getAutocomplete_internal(TrieNode* node, std::string* word_array, cha
 
         buf[index] = i + 'a';
 
-        getAutocomplete_internal(node->children[i], word_array, buf, index + 1, word_number);
+        getAutocomplete_internal(node->children[i], words_array, buf, index + 1, words_number);
     }
     return word_index;
 }

@@ -3,7 +3,7 @@
 #include <memory>
 
 const int ALPHABET_SIZE = 26;
-const int MAX_WORD_LENGTH = 100;
+const int MAX_STRING_LENGTH = 100;
 class Trie
 {
 public:
@@ -20,10 +20,10 @@ public:
     auto findMinPrefixes(TrieNode* root, char buf[], int ind, std::string& res) -> void;
     auto hasEndOfWord(TrieNode* node, int& count) -> void;
 
-    auto getAutocomplete(const std::string& preffix, int& word_number, std::string* word_array)const -> void;
+    auto getAutocomplete(const std::string& preffix, int& words_number, std::string* word_array)const -> void;
 
 private:
     TrieNode* _root{nullptr};
     auto remove(TrieNode* node, std::string key, int depth) -> TrieNode*;
-    auto getAutocomplete_internal(TrieNode* node, std::string* word_array, char buf[], int index, int& word_number) const -> int;
+    auto getAutocomplete_internal(TrieNode* node, std::string* words_array, char buf[], int index, int& word_number) const -> int;
 };
